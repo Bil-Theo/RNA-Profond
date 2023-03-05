@@ -18,6 +18,6 @@ print('Y', Y.shape)
 params, score = neural_network(X, Y, hidden_layers = (32, 32,  32))
 print('Evalutaion: ', score * 100)
 
-if score > 98:
+if score > 0.98:
     save_model(params)
-    print("successful backup of model")
+    print("successful backup of best model")
