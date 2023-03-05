@@ -16,6 +16,7 @@ print('X', X.shape)
 print('Y', Y.shape)
 
 params, score = neural_network(X, Y, hidden_layers = (32, 32,  32))
+print('Evalutaion: ', score * 100)
 
 if score > 98:
     save_model(params)
