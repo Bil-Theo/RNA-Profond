@@ -92,7 +92,7 @@ def neural_network(X, Y, hidden_layers ,nbr_iteration = 1000, rate_learning = 0.
 
 
         
-    print(score)
+    #print(score)
     plt.figure(figsize=(12,4))
     plt.subplot(1,2,1)
     plt.plot(Lg_train, label = 'Train Loss')
