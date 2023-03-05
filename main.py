@@ -2,22 +2,21 @@ import numpy as np
 import matplotlib.pyplot as plt
 from myfunctions import *
 from utilitaire import load_data
+from sklearn.datasets import make_circles
 
-X_train, Y_train, X_test, Y_test = load_data()
-print(X_train.shape)
-print(Y_train.shape)
-print(X_test.shape)
-print(Y_test.shape)
-#show_image(X_train)
 
-X_train, Y_train, X_test, Y_test = redimension(X_train, Y_train, X_test, Y_test)
-print(X_train.shape)
-print(Y_train.shape)
-print(X_test.shape)
-print(Y_test.shape)
-plt.scatter(X_train[0, :], X_train[1, :])
-plt.show()
+X, y = make_circles(n_samples=100, random_state=0,  noise = 0.01)
 
-params = neural_network(X_train, Y_train, X_test, Y_test, n1=16)
-fun.save_model(params)
+y = y.reshape(y.shape[0], 1)
 
+X = X.T
+Y = y.T
+
+print('X', X.shape)
+print('Y', Y.shape)
+
+params, score = neural_network(X, Y, hidden_layers = (32, 32,  32))
+
+if score > 98:
+    save_model(params)
+    print("successful backup of model")

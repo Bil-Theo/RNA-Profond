@@ -35,7 +35,7 @@ def cost_function(A, y):
 def back_propagation(A, X, y, params):
     m = y.shape[1]
     gradient = {}
-    Cf = params//2
+    Cf = len(params)//2
     dz = A['a'+str(Cf)] - y
 
     for c in reversed(range(1, Cf+1)):
@@ -56,7 +56,7 @@ def udpate(gradient, params, rate_learning):
     return params
 
 
-def neural_network(X, Y, hidden_layers ,nbr_iteration = 1000, rate_learning = 0.01):
+def neural_network(X, Y, hidden_layers ,nbr_iteration = 1000, rate_learning = 0.1):
     dimensions = list(hidden_layers)
     dimensions.insert(0, X.shape[0])
     dimensions.append(Y.shape[0])
@@ -66,16 +66,19 @@ def neural_network(X, Y, hidden_layers ,nbr_iteration = 1000, rate_learning = 0.
     acc_train = []
     #Lg_test = []
     #acc_test = []
-    Cf = len(params)//2
-    Rate = 0
+    cscore = 0
+
     for i in tqdm(range(nbr_iteration)):
-        A = forward_propagation(X, params)      
-        if i % 10 ==0:
+        A = forward_propagation(X, params)   
+        gradient = back_propagation(A, X, Y, params)  
+        params = udpate(gradient, params, rate_learning)   
+        if i % 10 == 0:
             #for train
+            Cf = len(params)//2
             Lg_train.append(cost_function(A['a'+str(Cf)], Y))
             y_pred = prediction(X, params)
-            Rate = accuracy_score(Y.flatten(), y_pred.flatten())
-            acc_train.append(Rate)
+            score = accuracy_score(Y.flatten(), y_pred.flatten())
+            acc_train.append(score)
 
 
             """A_t = forward_propagation(x, params)
@@ -86,12 +89,10 @@ def neural_network(X, Y, hidden_layers ,nbr_iteration = 1000, rate_learning = 0.
             rate = accuracy_score(ym, y_pred.flatten()[:ym.shape[0]])
             acc_test.append(rate)"""
         
-        gradient = back_propagation(A, X, Y, params)  
-        params = udpate(gradient, params, rate_learning)
 
 
         
-    print(Rate)
+    print(score)
     plt.figure(figsize=(12,4))
     plt.subplot(1,2,1)
     plt.plot(Lg_train, label = 'Train Loss')
@@ -102,7 +103,7 @@ def neural_network(X, Y, hidden_layers ,nbr_iteration = 1000, rate_learning = 0.
     #plt.plot(acc_test, label = 'Test Acc')
     plt.legend()
     plt.show()
-    return params
+    return params, score
 
 
 
